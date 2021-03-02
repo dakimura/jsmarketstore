@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "watch": "tsc --watch",
+    "build": "tsc",
+    "test": "jest",
+    "proto": "sh ./scripts/proto.sh"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.1",
+    "ts-protoc-gen": "^0.14.0",
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "@improbable-eng/grpc-web": "^0.14.0",
+    "@improbable-eng/grpc-web-node-http-transport": "^0.14.0",
+    "@types/node": "^14.14.27",
+    "axios": "^0.21.1",
+    "base64-arraybuffer": "^0.2.0",
+    "log4js": "^6.3.0",
+    "msgpack-lite": "^0.1.26"
+  }
+}
