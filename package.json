@@ -2,15 +2,29 @@
   "scripts": {
     "watch": "tsc --watch",
     "build": "tsc",
-    "test": "jest",
-    "proto": "sh ./scripts/proto.sh"
+    "proto": "sh ./scripts/proto.sh",
+    "fix": "run-p fix:*",
+    "fix:eslint": "npm run lint:eslint -- --fix",
+    "lint": "run-p lint:*",
+    "lint:eslint": "eslint --ext ts .",
+    "lint:type": "tsc --noEmit",
+    "test": "run-s lint test:*",
+    "test:unit": "jest"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^26.6.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
     "ts-jest": "^26.5.1",
-    "ts-protoc-gen": "^0.14.0",
-    "typescript": "^4.1.5"
+    "typescript": "^4.2.3"
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.14.0",
@@ -19,6 +33,7 @@
     "axios": "^0.21.1",
     "base64-arraybuffer": "^0.2.0",
     "log4js": "^6.3.0",
-    "msgpack-lite": "^0.1.26"
+    "msgpack-lite": "^0.1.26",
+    "ts-protoc-gen": "^0.14.0"
   }
 }
