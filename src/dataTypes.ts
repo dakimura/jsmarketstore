@@ -1,4 +1,4 @@
-export const DATA_TYPES = {
+export const DataType = {
   BYTE: {
     name: 'i1',
     size: 1,
@@ -116,9 +116,9 @@ export const DATA_TYPES = {
     },
   },
 } as const
-export type DATA_TYPE = typeof DATA_TYPES[keyof typeof DATA_TYPES]
+export type DataType = typeof DataType[keyof typeof DataType]
 
-export const DataTypeFromStringMap = new Map<string, DATA_TYPE>()
-for (const dataType of Object.values(DATA_TYPES)) {
-  DataTypeFromStringMap[dataType.name] = dataType
+export const DataTypeFromStringMap = new Map<string, DataType>()
+for (const dataType of Object.values(DataType)) {
+  DataTypeFromStringMap.set(dataType.name, dataType)
 }

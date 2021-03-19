@@ -1,4 +1,5 @@
-import { DATA_TYPE, DataTypeFromStringMap } from './dataTypes'
+import { DataType, DataTypeFromStringMap } from './dataTypes'
+import { UnknownColumnTypeError } from './errors'
 
 // TODO: necessary when we support 'U16'(string) datatype
 // function decodeAscii(buf: ArrayBuffer): Uint8Array {
@@ -10,10 +11,17 @@ import { DATA_TYPE, DataTypeFromStringMap } from './dataTypes'
  * @param buf
  * @param columnType e.g. "i8"
  */
-export function decodeColumnBuffer(buf: ArrayBuffer, columnType: string): number[] {
+export function decodeColumnBuffer(
+  buf: ArrayBuffer,
+  columnType: string,
+): number[] | UnknownColumnTypeError {
   const ret = []
 
-  const columnDataType: DATA_TYPE = DataTypeFromStringMap[columnType]
+  const columnDataType: DataType | undefined = DataTypeFromStringMap.get(columnType)
+  if (columnDataType == null) {
+    return new UnknownColumnTypeError(columnType)
+  }
+
   const colSize: number = columnDataType.size
 
   // read the values of the column

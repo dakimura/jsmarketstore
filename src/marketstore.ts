@@ -8,11 +8,12 @@ import * as http from 'http'
 import * as log4js from 'log4js'
 
 import buildQuery from './buildQuery'
-import { DATA_TYPE } from './dataTypes'
+import { DataType } from './dataTypes'
 import { decodeColumnBuffer } from './decodeBuffer'
 import encodeColumnsBase64 from './encodeColumn'
-import { ListSymbolsFormat, ListSymbolsFormats } from './listSymbolsFormat'
-import Params from './params'
+import { ListSymbolsFormat } from './listSymbolsFormat'
+import { Params } from './params'
+import { UnknownColumnTypeError } from './errors'
 
 const logger = log4js.getLogger()
 logger.level = 'debug'
@@ -73,7 +74,7 @@ export class Client {
             jsonrpc: '2.0',
             id: +new Date(),
             method: LIST_BUCKETS_JSONRPC_METHOD,
-            params: { format: ListSymbolsFormats[format] },
+            params: { format: format },
           },
           requestConfig,
         )
@@ -93,7 +94,7 @@ export class Client {
     return new Promise<Map<number, Column>>(
       (
         okCallBack: (value: Map<number, Column> | PromiseLike<Map<number, Column>>) => void,
-        ngCallBack: (reason?) => void,
+        ngCallBack: (reason?: any) => void,
       ) => {
         axios
           .post(
@@ -130,7 +131,16 @@ export class Client {
 
             // decode columns
             for (let i = 0; i < columnNames.length; i++) {
-              columns[i] = decodeColumnBuffer(decodeBase64(columnData[i]), columnTypes[i])
+              const column: number[] | UnknownColumnTypeError = decodeColumnBuffer(
+                decodeBase64(columnData[i]),
+                columnTypes[i],
+              )
+              if (column instanceof UnknownColumnTypeError) {
+                logger.warn('unknown column type:' + column)
+                continue
+              }
+
+              columns[i] = column
             }
 
             // convert columns to rows.
@@ -152,7 +162,7 @@ export class Client {
     )
   }
 
-  private static getColumnTypeStr(dtypes: [string, DATA_TYPE][]): string[] {
+  private static getColumnTypeStr(dtypes: [string, DataType][]): string[] {
     const typeStrs: string[] = []
     for (let i = 0; i < dtypes.length; i++) {
       typeStrs.push(dtypes[i][1].name)
@@ -160,15 +170,15 @@ export class Client {
     return typeStrs
   }
 
-  private static getColumnTypes(dtypes: [string, DATA_TYPE][]): DATA_TYPE[] {
-    const typeStrs: DATA_TYPE[] = []
+  private static getColumnTypes(dtypes: [string, DataType][]): DataType[] {
+    const typeStrs: DataType[] = []
     for (let i = 0; i < dtypes.length; i++) {
       typeStrs.push(dtypes[i][1])
     }
     return typeStrs
   }
 
-  private static getColumnNames(dtypes: [string, DATA_TYPE][]): string[] {
+  private static getColumnNames(dtypes: [string, DataType][]): string[] {
     const columnNames: string[] = []
     for (let i = 0; i < dtypes.length; i++) {
       columnNames.push(dtypes[i][0])
@@ -177,16 +187,16 @@ export class Client {
   }
 
   public write(
-    dtypes: [string, DATA_TYPE][],
+    dtypes: [string, DataType][],
     rows: number[][],
     tbk: string,
     isVariableLength = false,
   ): Promise<void> {
     const url: string = this.baseURL
 
-    const lengths = {}
+    const lengths: Lengths = {}
     lengths[tbk] = rows.length
-    const startIndex = {}
+    const startIndex: StartIndex = {}
     startIndex[tbk] = 0
 
     const request = {
@@ -202,7 +212,10 @@ export class Client {
     }
 
     return new Promise<void>(
-      (okCallBack: (value: void | PromiseLike<void>) => void, ngCallBack: (reason?) => void) => {
+      (
+        okCallBack: (value: void | PromiseLike<void>) => void,
+        ngCallBack: (reason?: any) => void,
+      ) => {
         axios
           .post(
             url,
@@ -235,7 +248,10 @@ export class Client {
     const url: string = this.baseURL
 
     return new Promise<void>(
-      (okCallBack: (value: void | PromiseLike<void>) => void, ngCallBack: (reason?) => void) => {
+      (
+        okCallBack: (value: void | PromiseLike<void>) => void,
+        ngCallBack: (reason?: any) => void,
+      ) => {
         axios
           .post(
             url,
@@ -266,4 +282,14 @@ export class Client {
 
 export interface Column {
   Epoch: number
+
+  [columnName: string]: number
+}
+
+interface StartIndex {
+  [tbk: string]: number
+}
+
+interface Lengths {
+  [tbk: string]: number
 }

@@ -1,4 +1,4 @@
-export default class Params {
+export class Params {
   // symbol name to query (e.g. "AAPL")
   // TODO: support multiple symbols (e.g. ["AAPL", "AMZN"])
   private readonly _symbol: string
@@ -36,23 +36,23 @@ export default class Params {
     return this._attributeGroup
   }
 
-  get start(): number {
+  get start(): number | undefined {
     return this._start
   }
 
-  get end(): number {
+  get end(): number | undefined {
     return this._end
   }
 
-  get limit(): number {
+  get limit(): number | undefined {
     return this._limit
   }
 
-  get limitFromStart(): boolean {
+  get limitFromStart(): boolean | undefined {
     return this._limitFromStart
   }
 
-  get columns(): string[] {
+  get columns(): string[] | undefined {
     return this._columns
   }
 

@@ -1,6 +1,32 @@
 {
+  "name": "jsmarketstore",
+  "version": "0.1.1",
+  "description": "javascript driver for marketstore",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dakimura/jsmarketstore.git"
+  },
+  "keywords": [
+    "marketstore",
+    "nodejs",
+    "timeseries",
+    "analysis",
+    "finance"
+  ],
+  "author": "Daito Akimura <daitoakimura@gmail.com> (http://github.com/dakimura)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TsutomuNakamura/jsmarketstore/issues"
+  },
+  "homepage": "https://github.com/dakimura/jsmarketstore/",
   "scripts": {
     "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
     "build": "tsc",
     "proto": "sh ./scripts/proto.sh",
     "fix": "run-p fix:*",

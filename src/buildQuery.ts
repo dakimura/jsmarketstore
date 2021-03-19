@@ -1,20 +1,20 @@
-import Params from './params'
+import { Params } from './params'
 
 interface Query {
   destination: string
-  key_category: string
-  epoch_start: number
-  epoch_start_nanos: number
-  epoch_end: number
-  epoch_end_nanos: number
-  limit_record_count: number
-  limit_from_start: boolean
+  key_category: string | undefined
+  epoch_start: number | undefined
+  epoch_start_nanos: number | undefined
+  epoch_end: number | undefined
+  epoch_end_nanos: number | undefined
+  limit_record_count: number | undefined
+  limit_from_start: boolean | undefined
 }
 
 export default function buildQuery(params: Params): Query {
   const tbk: string = params.symbol + '/' + params.timeframe + '/' + params.attributeGroup
 
-  const query = {
+  let query: Query = {
     destination: tbk,
     key_category: undefined,
     epoch_start: undefined,
@@ -23,7 +23,6 @@ export default function buildQuery(params: Params): Query {
     epoch_end_nanos: undefined,
     limit_record_count: params.limit,
     limit_from_start: params.limitFromStart,
-    functions: undefined,
   }
 
   if (params.start != null) {

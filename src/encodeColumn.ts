@@ -1,6 +1,6 @@
 import { encode } from 'base64-arraybuffer'
 
-import { DATA_TYPE } from './dataTypes'
+import { DataType } from './dataTypes'
 
 // rows[x][y] = y-th column of x-th row
 /**
@@ -8,7 +8,7 @@ import { DATA_TYPE } from './dataTypes'
  * @param rows
  * @param dataTypes
  */
-export default function encodeColumnsBase64(rows: number[][], dataTypes: DATA_TYPE[]): string[] {
+export default function encodeColumnsBase64(rows: number[][], dataTypes: DataType[]): string[] {
   const ret: string[] = []
 
   // for each column
