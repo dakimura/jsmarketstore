@@ -1,46 +1,46 @@
 import { Params } from './params'
 
 interface Query {
-  destination: string
-  key_category: string | undefined
-  epoch_start: number | undefined
-  epoch_start_nanos: number | undefined
-  epoch_end: number | undefined
-  epoch_end_nanos: number | undefined
-  limit_record_count: number | undefined
-  limit_from_start: boolean | undefined
+  Destination: string
+  KeyCategory: string | undefined
+  EpochStart: number | undefined
+  EpochStartNanos: number | undefined
+  EpochEnd: number | undefined
+  EpochEndNanos: number | undefined
+  LimitRecordCount: number | undefined
+  LimitFromStart: boolean | undefined
 }
 
 export default function buildQuery(params: Params): Query {
   const tbk: string = params.symbol + '/' + params.timeframe + '/' + params.attributeGroup
 
   let query: Query = {
-    destination: tbk,
-    key_category: undefined,
-    epoch_start: undefined,
-    epoch_start_nanos: undefined,
-    epoch_end: undefined,
-    epoch_end_nanos: undefined,
-    limit_record_count: params.limit,
-    limit_from_start: params.limitFromStart,
+    Destination: tbk,
+    KeyCategory: undefined,
+    EpochStart: undefined,
+    EpochStartNanos: undefined,
+    EpochEnd: undefined,
+    EpochEndNanos: undefined,
+    LimitRecordCount: params.limit,
+    LimitFromStart: params.limitFromStart,
   }
 
   if (params.start != null) {
     const start: number[] = divmod(params.start, 1000000000)
-    query.epoch_start = start[0]
-    query.epoch_start_nanos = start[1]
+    query.EpochStart = start[0]
+    query.EpochStartNanos = start[1]
   }
 
   if (params.end != null) {
     const end: number[] = divmod(params.end, 1000000000)
-    query.epoch_end = end[0]
-    query.epoch_end_nanos = end[1]
+    query.EpochEnd = end[0]
+    query.EpochEndNanos = end[1]
   }
 
   return query
 }
 
 function divmod(n: number, m: number): number[] {
-  const n2 = n * m
-  return [n2 / m, n2 % m]
+  const n2: number = n * m
+  return [Math.floor(n2 / m), n2 % m]
 }

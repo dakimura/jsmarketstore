@@ -24,6 +24,26 @@ export class Params {
   // column names to query. (e.g. ["Open", "Close"]). When empty, all columns are queried.
   private readonly _columns?: string[]
 
+  constructor(
+    symbol: string,
+    timeframe: string,
+    attributeGroup: string,
+    start = 0,
+    end?: number,
+    limit?: number,
+    limitFromStart?: boolean,
+    columns?: Array<string>,
+  ) {
+    this._symbol = symbol
+    this._timeframe = timeframe
+    this._attributeGroup = attributeGroup
+    this._start = start
+    this._end = end
+    this._limit = limit
+    this._limitFromStart = limitFromStart
+    this._columns = columns
+  }
+
   get symbol(): string {
     return this._symbol
   }
@@ -54,25 +74,5 @@ export class Params {
 
   get columns(): string[] | undefined {
     return this._columns
-  }
-
-  constructor(
-    symbol: string,
-    timeframe: string,
-    attributeGroup: string,
-    start = 0,
-    end?: number,
-    limit?: number,
-    limitFromStart?: boolean,
-    columns?: Array<string>,
-  ) {
-    this._symbol = symbol
-    this._timeframe = timeframe
-    this._attributeGroup = attributeGroup
-    this._start = start
-    this._end = end
-    this._limit = limit
-    this._limitFromStart = limitFromStart
-    this._columns = columns
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "jsmarketstore",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "javascript driver for marketstore",
   "main": "dist/index.js",
   "files": [
